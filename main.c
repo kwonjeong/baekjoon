@@ -1,20 +1,36 @@
 #include <stdio.h>
-// 2869 달팽이는 올라가고 싶다
+// 백준 2476 : 주사위 게임
 
-int main() {
-    unsigned long long a, b, v, goal = 0;
-    int count = 0;
+int main(){
+    int n = 0; // 사람 수
+    int a, b, c = 0; // 던진 주사위 눈
+    int m = 0; // 가장 큰 눈
+    int max = 0; // 가장 큰 상금
 
-    scanf("%d %d %d", &a, &b, &v);
+    scanf("%d", &n); // 사람 수 입력받음
+    int price[n];
 
-    // 달팽이가 정상에 도달한 이후에는 미끄러지지 않으므로 총 거리에서 떨어진 거리를 빼고 나눠 일수를 구해야 최소한의 일수를 구함
-    if ((v - b) % (a - b) != 0){ // 정확히 나누어떨어지지 않을 때 달팽이는 한번 더 미끄러지고 올라가므로 하루 더 소요
-        count = (v - b) / (a - b);
-        count++;
+    for(int i = 0; i < n; i++){
+        scanf("%d %d %d", &a, &b, &c); // 주사위 눈 입력받음
+        if(a == b && b == c && a == c) // 세 수가 같을 때
+            price[i] = 10000 + a * 1000;
+        else if (a == b || b == c || c == a){ // 두 수만 같을 때
+            if (a == b || a == c) // a가 b와 c와 같을 때
+                price[i] = 1000 + a * 100;
+            else if (b == c) // b와 c가 같을 때
+                price[i] = 1000 + b * 100;
+        }
+        else { // 다 다를 때
+            if(a > b && a > c) // a가 가장 클때
+                m = a;
+            else if (b > a && b > c) // b가 가장 클 때
+                m = b;
+            else if (c > a && c > b) // c가 가장 클 때
+                m = c;
+            price[i] = m * 100;
+        }
+        if(price[i] > max)
+            max = price[i]; // 가장 큰 상금
     }
-    else
-        count = (v - b) / (a - b); // 정확히 나누어 떨어질 때 총 거리 - 떨어진 거리 / 올라간 거리 - 떨어진 거리
-
-    printf("%d\n", count);
-    return 0;
+    printf("%d\n", max);
 }
